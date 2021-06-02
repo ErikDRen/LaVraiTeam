@@ -5,182 +5,225 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forum</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
-        integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+    <!-- <link rel="stylesheet" href="style/connect.css"> -->
+    <title>Register</title>
+
+    <script type="text/javascript">
+
+
+       
+
+        function create() {
+            var data = "{{.Poste}}"
+            console.log(data);
+            data = data.slice(1, -1)
+
+            const idRegex = /(?<={)\d+/g
+            const pseudoRegex = /(?<=\d\s\s)\w+(?=\s\s)/g
+
+            var id = data.match(idRegex) // id ok
+            var pseudo = data.match(pseudoRegex) // pseudo ok whitout special char
+
+            var postForm1 = data.replace(/(?<=\d\s\s)\w+(?=\s\s)/g, "")
+            var postForm2 = postForm1.replace(/(?<={)\d+\s\s\s\s/g, "")
+            postForm2 = postForm2.slice(1, -1)
+            var postFinalForm = postForm2.split("} {") // post ok even with special char
+
+            var avatar = "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7120430-4520896815-latest";
+            var CreationDate = new Date("")
+
+
+            for (i = 0; i <= id.length - 1; i++) {
+
+                // le conteneur de la div
+                var div1 = document.createElement('div');
+                div1.setAttribute('class', 'large-7 small-8 column lpad')
+                div1.id = i;
+                div1.onclick = function() {
+                    redirect(this.id);
+                }
+
+                // Le cadre de l'avatar
+                var div2 = document.createElement('div');
+                div2.setAttribute('class', 'large-1 column lpad')
+
+                // La photo de l'avatar
+                var divimage = document.createElement('img');
+                divimage.setAttribute('class', 'icon-file')
+                divimage.setAttribute('id', 'img')
+                divimage.setAttribute('src', avatar)
+                divimage.setAttribute('alt', 'Music')
+
+                // nom de l'auteur du post
+                var div3 = document.createElement('div');
+                var txt3 = document.createTextNode(id[i])
+                div3.setAttribute('class', 'card-header')
+                div3.appendChild(txt3)
+
+                // titre du topic
+                var div4 = document.createElement('div');
+                var txt4 = document.createTextNode(pseudo[i])
+                div4.setAttribute('class', 'overflow-control')
+                div4.appendChild(txt4)
+
+                // description du topic
+                var div5 = document.createElement('div');
+                var txt5 = document.createTextNode(postFinalForm[i])
+                div5.setAttribute('class', 'overflow-control')
+                div5.appendChild(txt5)
+
+                // var div6 = document.createElement('button');
+                // var txt6 = document.createTextNode('like')
+                // div6.setAttribute('class', 'like' + i)
+                // div6.appendChild(txt6)
+
+                // var div7 = document.createElement('button');
+                // var txt7 = document.createTextNode('dislike')
+                // div7.setAttribute('class', 'dislike')
+                // div7.appendChild(txt7)
+
+
+                var parent = document.getElementById("start")
+
+                // On assemble les divs
+                document.body.appendChild(div1);
+                parent.appendChild(div1)
+                div1.appendChild(div2)
+                div1.appendChild(div3)
+                div1.appendChild(div4)
+                div1.appendChild(div5)
+                // div1.appendChild(div6)
+                // div1.appendChild(div7)
+                div2.appendChild(divimage)
+
+
+            }
+        }
+        function redirect(id) {
+            window.location.href = '/comment?' + String(id);
+        }
+
+    </script>
 </head>
 
 <body>
-    <a href="/post">Ici</a>
-</body>
 
-<div>
-    <div id="thread__wrapper">
+        <a href="/main">log out</a>
 
-        <!-- Banderole d'avertissement pour le spoiler -->
-        <div id="comment-policy" class="comment-policy publisher-anchor-color">
-            <div class="content">
-                <p class="comment-policy-title text-bold">Watch Krom Chat Comment Policy</p>
-                <p class="comment-policy-text">Be Civil. Do not post spoilers and Once again, if you
-                    see any offensive comments report/flag them.
-                <p class="comment-policy-link"></p>
-                </p>
-            </div><span aria-hidden="true" class="icon icon-chat-bubble"></span>
-        </div>
-        <div id="highlighted-post" data-tracking-area="highlighted" class="highlighted-post" style="display: none;">
-        </div>
-        <div id="global-alert"></div>
-        <div id="tos__container"></div>
-        <!-- Fin de la Banderole  -->
+    <!-- <button class="like">Like👍</button>
+    <button class="like">Like👍</button>
+    <button class="dislike">Dislike👎</button> -->
+    
+    <div>
 
+        <form method="POST">
 
-        <section id="conversation" data-role="main" data-tracking-area="main">
-            <div class="nav nav-secondary" data-tracking-area="secondary-nav">
-                <ul>
+            <div>
 
-                    <!-- Recommended Link -->
-                    <li id="recommend-button" class="nav-tab nav-tab--secondary recommend dropdown">
-                        <div class="thread-likes">
-                            <div><a href="#" data-action="recommend" title="Recommend this discussion"
-                                    class="dropdown-toggle "><span class="label label-default"><span
-                                            class="recommend-icon icon-heart-empty"></span> Recommend</span><span
-                                        class="label label-recommended"><span class="recommend-icon icon-heart"></span>
-                                        Recommended</span> <span class="label label-count">45</span></a>
-
-                            </div>
-                        </div>
-                    </li>
-                    <!-- Fin du recommended Link (Le Like) -->
-
-                    <!-- <li id="thread-share-bar" class="nav-tab nav-tab--secondary share-bar hidden-sm">
-                        <div class="thread-share-bar-buttons"><span class="thread-share__button share-twitter"
-                                data-action="share:twitter" tabindex="0"><span class="icon-twitter"></span><span
-                                    class="share-text">Tweet</span></span><span
-                                class="thread-share__button share-facebook" data-action="share:facebook"
-                                tabindex="0"><span class="icon-facebook"></span><span
-                                    class="share-text">Share</span></span></div>
-                    </li> -->
-
-                    <!-- Sort By Best/Newest/Oldest -->
-                    <li data-role="post-sort" class="nav-tab nav-tab--secondary dropdown sorting pull-right"><a href="#"
-                            class="dropdown-toggle" data-toggle="dropdown">Sort by Best<span class="caret"></span></a>
-                        <ul class="dropdown-menu pull-right">
-                            <li class="selected"><a href="#" data-action="sort" data-sort="popular">Best<i
-                                        aria-hidden="true" class="icon-checkmark"></i></a></li>
-                            <li class=""><a href="#" data-action="sort" data-sort="desc">Newest<i aria-hidden="true"
-                                        class="icon-checkmark"></i></a></li>
-                            <li class=""><a href="#" data-action="sort" data-sort="asc">Oldest<i aria-hidden="true"
-                                        class="icon-checkmark"></i></a></li>
-                        </ul>
-                    </li>
-                    <!-- Fin de sort -->
-
-                </ul>
-            </div>
-            <div id="posts">
-                <div id="form" class="textarea-outer-wrapper--top-level">
-                    <form class="reply">
-                        <div class="postbox">
-                            <div role="alert"></div>
-                            <div class="ratings-wrapper" data-role="ratings-container"></div>
-                            <div class="compose-wrapper">
-                                <div class="avatar"><span class="user"><img data-role="user-avatar"
-                                            src="//a.disquscdn.com/1621619202/images/noavatar92.png"
-                                            alt="Avatar"></span></div>
-                                <div class="textarea-outer-wrapper">
-                                    <div class="textarea-wrapper" data-role="textarea" dir="auto">
-                                        <div><span class="placeholder">Join the discussion…</span>
-                                            <div class="textarea" tabindex="0" role="textbox" aria-multiline="true"
-                                                contenteditable="PLAINTEXT-ONLY" data-role="editable"
-                                                aria-label="Join the discussion…"
-                                                style="overflow: auto; overflow-wrap: break-word; max-height: 350px;">
-                                                <p><br></p>
-                                            </div>
-                                            <div style="display: none;">
-                                                <ul class="user-mention__list" id="user-mention-list">
-                                                    <li class="header user-mention__header">
-                                                        <h5>in this conversation</h5>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div data-role="drag-drop-placeholder" class="media-drag-hover"
-                                            style="display: none;">
-                                            <div class="drag-text">⬇ Drag and drop your images here to upload them.
-                                            </div>
-                                        </div><input type="checkbox" name="author-guest" style="display: none;">
-                                        <div class="g-recaptcha" data-role="grecaptcha-container"></div>
-                                        <div class="proceed" data-role="submit-btn-container"><button type="submit"
-                                                class="proceed__button btn submit" aria-label="Next"><span
-                                                    class="icon-proceed"></span>
-                                                <div class="spinner"></div>
-                                            </button></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div><button class="alert alert--realtime" data-role="realtime-notification"
-                    style="display: none;"></button>
-                <!-- avatar -->
                 <div>
-                    <div class="avatar hovercard"><a href="https://disqus.com/by/disqus_dUJCx6ATdo/"
-                            data-action="profile" data-tab="" data-username="disqus_dUJCx6ATdo" target="_blank"
-                            rel="noopener noreferrer" class="user"><img data-role="user-avatar" data-user="326113714"
-                                src="https://c.disquscdn.com/uploads/users/32611/3714/avatar92.jpg?1592820717"
-                                alt="Avatar"></a>
+
+                    <div>
+                        <h1>Create an account</h1>
                     </div>
-                    <!-- post -->
-                    <div class="post-body">
-                        <header class="comment__header"><span class="post-byline"><span> <span
-                                        class="author publisher-anchor-color"><a
-                                            href="https://disqus.com/by/disqus_dUJCx6ATdo/" data-action="profile"
-                                            data-tab="" data-username="disqus_dUJCx6ATdo" target="_blank"
-                                            rel="noopener noreferrer">Some Guy</a></span>
-                                </span></span> <span class="post-meta"><span class="bullet time-ago-bullet"
-                                    aria-hidden="true">•</span> <a
-                                    href="https://readberserk.com/chapter/berserk-chapter-363/#comment-5155481999"
-                                    data-role="relative-time" class="time-ago"
-                                    title="Tuesday, November 17, 2020 10:00 PM">6
-                                    months ago</a> </span>
-                        </header>
-                        <div class="post-body-inner">
-                            <div class="post-message-container" data-role="message-container">
-                                <div class="publisher-anchor-color" data-role="message-content">
-                                    <div class="publisher-anchor-color" data-role="message-content">
-                                        <div class="post-message " data-role="message" dir="auto">
-                                            <div>
-                                                <p>aye man took me a bit to finally read all of this and yeah it
-                                                    was definitely worth every minute I spent reading, hope
-                                                    miura rests easy forever</p>
-                                            </div>
-                                        </div><span class="post-media">
-                                            <ul data-role="post-media-list"></ul>
-                                        </span>
-                                    </div>
-                                    <!-- Image container -->
+
+                    <div>
+                        <label>
+                            <span>User name</span>
+                            <input type="text" name="username" id="user" required>
+                        </label>
+                    </div>
+
+                    <div>
+                        <label>
+                            <span>newPost</span>
+                            <input type="text" name="newPost" id="newPost" required>
+                        </label>
+                    </div>
 
 
-                                    <div class="media-container media-mode-deferred media-activated">
-
-                                                <div class="media-content-loader" data-role="content-loader">
-                                                </div>
-                                                <div data-role="content-placeholder"
-                                                    class="media-content-placeholder media-Disquscdn "
-                                                    style="height: auto;"><a
-                                                        href="https://uploads.disquscdn.com/images/9a314f1789a85b5d3705d996ddf1c522bdf2af35a82a42bc2df88f8ea212ab04.png"
-                                                        target="_blank" rel="nofollow">
-                                                        <img src="//uploads.disquscdn.com/images/9a314f1789a85b5d3705d996ddf1c522bdf2af35a82a42bc2df88f8ea212ab04.png?w=800&amp;h=463"
-                                                            alt="Thumbnail" height="463">
-                                                    </a></div>
-                                            </div>
-                                </div>
-                            </div>
-                        </div>
+                    <button>Register</button>
+                    <div>
+                        {{.Poste}}
                     </div>
                 </div>
+
             </div>
 
+        </form>
+        <div class="grix xs1 md2 lg3" id="start">
+            <script type="text/javascript">
+                create();
+            </script>
+
+        </div>
+
+    </div>
+
+</body>
+
+<!-- <script>
+    const getLike = document.querySelectorAll('.like');
+    console.log(getLike);
+    const getdisLike = document.querySelector('.dislike');
+
+    var like = 0;
+    var dislike = 0;
+    var clickYetLike = false;
+    var clickYetDislike = false;
+
+    increaseLike = () => {
+        if (clickYetLike == false && clickYetDislike == true) {
+            like++;
+            dislike--;
+            clickYetLike = true
+            clickYetDislike = false
+            console.log("AAAAAAAAAAAAAA");
+        }
+        else if (clickYetLike == true) {
+            like--;
+            clickYetLike = false;
+            console.log("BBBBBBBBBBBBBBBBB");
+        }
+        else {
+            like++;
+            clickYetLike = true
+            console.log("CCCCCCCCCCCCCCCCCCCCC");
+
+        }
+        getLike[0].innerHTML = `Like👍 | ${like}`
+        getdisLike.innerHTML = `Dislike👎| ${dislike}`
+
+    }
+    decreaseLike = () => {
+        if (clickYetDislike == false && clickYetLike == true) {
+            dislike++;
+            like--;
+            clickYetDislike = true
+            clickYetLike = false
+        }
+        else if (clickYetDislike == true) {
+            dislike--;
+            clickYetDislike = false;
+        } else {
+            dislike++
+            clickYetDislike = true
+        }
+        getLike[0].innerHTML = `Like👍 | ${like}`
+        getdisLike.innerHTML = `Dislike👎| ${dislike}`
+    }
+
+
+
+
+    likeClick = () => {
+        increaseLike()
+    }
+
+    dislikeClick = () => {
+        decreaseLike()
+    }
+    getLike[0].addEventListener(('click'), likeClick)
+    getdisLike.addEventListener(('click'), dislikeClick)
+</script> -->
 
 </html>
